@@ -54,12 +54,36 @@ class Dataset(object):
 
 
 class MnistDataset(object):
-    def __init__(self):
+    def __init__(self, proportions = None):
         data_directory = "MNIST"
         if not os.path.exists(data_directory):
             os.makedirs(data_directory)
         dataset = mnist.input_data.read_data_sets(data_directory)
-        self.train = dataset.train
+        if proportions is None:
+            self.train = dataset.train
+        else:
+            assert len(proportions) == 10
+            sup_images = []
+            sup_labels = []
+            rnd_state = np.random.get_state()
+            np.random.seed(0)
+            len_train = len(dataset.train.labels)
+            from collections import Counter
+            label_counts = Counter( dataset.train.labels )
+            coef = min( (label_counts[nn] // proportions[nn] for nn in range(10) ) )
+            for cat in range(10):
+                num_cat = coef * proportions[cat]
+                print( "digit:", cat, "frequency:", num_cat)
+                ids = np.where(dataset.train.labels == cat)[0]
+                np.random.shuffle(ids)
+                sup_images.extend(dataset.train.images[ids[:num_cat]])
+                sup_labels.extend(dataset.train.labels[ids[:num_cat]])
+            np.random.set_state(rnd_state)
+            self.train = Dataset(
+                np.asarray(sup_images),
+                np.asarray(sup_labels),
+            )
+
         # make sure that each type of digits have exactly 10 samples
         sup_images = []
         sup_labels = []

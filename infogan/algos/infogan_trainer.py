@@ -5,7 +5,8 @@ import numpy as np
 from progressbar import ETA, Bar, Percentage, ProgressBar
 from infogan.misc.distributions import Bernoulli, Gaussian, Categorical
 import sys
-
+import six
+from six.moves import range as xrange
 TINY = 1e-8
 
 

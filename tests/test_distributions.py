@@ -2,7 +2,9 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 from nose2.tools import such
-from misc.distributions import Categorical, Gaussian, Product, Bernoulli
+import sys
+sys.path.append("../infogan/misc")
+from distributions import Categorical, Gaussian, Product, Bernoulli
 import numpy as np
 import tensorflow as tf
 

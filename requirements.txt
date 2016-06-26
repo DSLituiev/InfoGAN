@@ -1,3 +1,4 @@
+six
 prettytensor
 progressbar
 dateutil

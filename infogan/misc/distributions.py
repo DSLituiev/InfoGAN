@@ -3,6 +3,7 @@ from __future__ import absolute_import
 import itertools
 import tensorflow as tf
 import numpy as np
+import six
 
 TINY = 1e-8
 
@@ -426,7 +427,7 @@ class Product(Distribution):
         ret = dict()
         for idx, dist_flat_i, dist_i in zip(itertools.count(), self.split_dist_flat(dist_flat), self.dists):
             dist_info_i = dist_i.activate_dist(dist_flat_i)
-            for k, v in dist_info_i.iteritems():
+            for k, v in six.iteritems(dist_info_i):
                 ret["id_%d_%s" % (idx, k)] = v
         return ret
 
